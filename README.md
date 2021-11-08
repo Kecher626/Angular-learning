@@ -15,12 +15,14 @@
 ## Angular 指令
 
 + ng new xxx (新建xxx angular專案)
++ ng serve --open (啟動開發伺服器、監聽原始檔並打開預設瀏覽器)
 + ng generate component xxx (生成xxx元件)
     - 這個命令會做這些事： 
       1. 建立目錄 src/app/hero-detail。 
       2. 在這個目錄中會產生四個檔案(css,html,ts,spec.ts) 
       3. 該命令還會把 HeroDetailComponent 新增到 src/app/app.module.ts 檔案中 @NgModule 的 declarations 列表中。
-+ ng serve --open (啟動開發伺服器、監聽原始檔並打開預設瀏覽器)
++ ng generate service xxx
+    - 該命令會在 src/app/ 中產生 xxxService.ts ，類別內含@Injectable()，它把這個類別標記為依賴注入系統的參與者之一
 
 ## CH1
 + 雙向繫結
@@ -67,3 +69,28 @@
     ![](Input.png)
     
     P.S. 這是一種單向資料繫結。從 HeroesComponent 的 selectedHero 屬性繫結到目標元素的 hero 屬性，並對映到了 HeroDetailComponent 的 hero 屬性，當 selectedHero 改變時，屬性繫結會修改 HeroDetailComponent 的 hero 屬性。
+
+## CH4
+
++ ngOnInit()
+    
+    讓建構函式保持簡單，只做最小化的初始化操作，比如把建構函式的引數賦值給屬性。 建構函式不應該做任何事。 它當然不應該呼叫某個函式來向遠端服務（比如真實的資料服務）發起 HTTP 請求。
+
+    而是選擇在 ngOnInit 生命週期鉤子中呼叫需做的 function，之後 Angular 會在構造出 HeroesComponent 的實例之後的某個合適的時機呼叫 ngOnInit()。
+
++ Observable & of()
+
+    應用要從遠端伺服器獲取資料，那大概率會是非同步操作。可使用Observable & of()實現，of() 會返回一個 Observable<>，Observable 是 RxJS 函式庫中的一個關鍵類別。<br>如:
+    ```
+        getHeroes(): Observable<Hero[]> {
+            const heroes = of(HEROES);
+            return heroes;
+        }
+    ```
+    而在調用時則須用Observable.subscribe()執行非同步工作
+    ```
+    getHeroes(): void {
+            this.heroService.getHeroes()
+                .subscribe(heroes => this.heroes = heroes;
+        }
+    ```
