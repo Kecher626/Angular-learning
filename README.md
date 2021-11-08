@@ -66,7 +66,7 @@
 + @Input() & 單向繫結
 
     @Input() 允許父元件更新子元件中的資料，如：<br><br>
-    ![](Input.png)
+    ![](Input.PNG)
     
     P.S. 這是一種單向資料繫結。從 HeroesComponent 的 selectedHero 屬性繫結到目標元素的 hero 屬性，並對映到了 HeroDetailComponent 的 hero 屬性，當 selectedHero 改變時，屬性繫結會修改 HeroDetailComponent 的 hero 屬性。
 
