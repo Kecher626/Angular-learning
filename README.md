@@ -94,3 +94,66 @@
                 .subscribe(heroes => this.heroes = heroes;
         }
     ```
+
+## CH5 (用route重構)
+
++ 新增 AppRoutingModule
+
+    在 Angular 中，最好在一個獨立的最上層模組中載入和配置路由器，它專注於路由功能，然後由根模組 AppModule 匯入它。<br>
+    範例 Route.ts：
+    ```
+    import { NgModule } from '@angular/core';
+    import { RouterModule, Routes } from '@angular/router';
+    import { HeroesComponent } from './heroes/heroes.component';        
+
+    const routes: Routes = [
+    { path: 'heroes', component: HeroesComponent }
+    ];
+
+    @NgModule({
+    imports: [RouterModule.forRoot(routes)],
+    exports: [RouterModule]
+    })
+    export class AppRoutingModule { }
+    ```
+    典型的 Angular Route 具有兩個屬性：
+    1. path: 用來匹配瀏覽器位址列中 URL 的字串。
+    2. component: 導航到該路由時，路由器應該建立的元件。<br><br>
+    
+    這會告訴路由器把該 URL 與 path：'heroes' 匹配。 如果網址類似於 localhost:4200/heroes 就顯示 HeroesComponent。最後，若要使用route，需在元素html中使用 `<router-outlet></router-outlet>`。
+
++ 新增路由連結 (routerLink)
+
+    新增一個 `<nav>` 元素，並在其中放一個連結 `<a>` 元素(或其他)，當點選它時，就會觸發一個到指定元素的導航。如：
+    ```
+    <nav>
+        <a routerLink="/heroes">Heroes</a>
+    </nav>
+    ```
+    routerLink 屬性的值為 "/heroes"，Route.ts會用它來匹配出指指定元素的路由。
+
++ 引數化連結
+
+    可在Route.ts裡加入類似的path匹配 <br>
+    如：`{ path: 'detail/:id', component: HeroDetailComponent }` <br>
+    範例 html
+    ```
+    <a *ngFor="let hero of heroes"
+        routerLink="/detail/{{hero.id}}">
+        {{hero.name}}
+    </a>
+    ```
+    這樣便能導向不同陣列元素，作相對應的事情。
+
++ 返回上一頁
+
+    需 `import { Location } from '@angular/common';`<br>
+    並定義如下 即可調用
+    ```
+    goBack(): void {
+        this.location.back();
+    }
+    ```
+
+
+    
